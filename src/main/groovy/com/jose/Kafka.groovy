@@ -22,8 +22,14 @@ class Kafka {
        // create producer record
        def record = new ProducerRecord<String, String>('kafka-demo', 'Hello Kafka!')
 
-        // send data to producer
+        // send data to producer - asynchronous
         producer.send(record)
+
+        // flush data
+        producer.flush()
+
+        // flush and close producer
+        producer.close()
 
     }
 }
