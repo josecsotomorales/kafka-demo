@@ -23,29 +23,31 @@ class Kafka {
         // create the producer
         def producer = new KafkaProducer<String, String>(properties)
 
-       // create producer record
-       def record = new ProducerRecord<String, String>('kafka-demo', 'Hello Kafka!')
+        for (i in 0..< 10) {
+            // create producer record
+            def record = new ProducerRecord<String, String>('kafka-demo', "I'm a Message! My UUID is ${UUID.randomUUID().toString()}" as String)
 
-        // send data to producer - asynchronous
-        producer.send(record, new Callback() {
-            @Override
-            void onCompletion(RecordMetadata metadata, Exception exception) {
-                // executes everytime a record is sent or and exception is thrown
-                if(!exception) {
-                    // the record was sent
-                    log.info(""" 
+            // send data to producer - asynchronous
+            producer.send(record, new Callback() {
+                @Override
+                void onCompletion(RecordMetadata metadata, Exception exception) {
+                    // executes everytime a record is sent or and exception is thrown
+                    if(!exception) {
+                        // the record was sent
+                        log.info(""" 
                                  |Received new metadata.
                                  |Topic:        ${metadata.topic()}
                                  |Partition:    ${metadata.partition()}
                                  |Offset:       ${metadata.offset()}
                                  |Timestamp:    ${metadata.timestamp()}       
                                  |""".stripMargin())
-                } else {
-                    log.error("Error while producing.", exception)
-                }
+                    } else {
+                        log.error("Error while producing.", exception)
+                    }
 
-            }
-        })
+                }
+            })
+        }
 
         // flush data
         producer.flush()
