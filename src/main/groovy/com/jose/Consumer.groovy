@@ -1,0 +1,42 @@
+package com.jose
+
+import groovy.util.logging.Slf4j
+import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.apache.kafka.clients.consumer.ConsumerRecords
+import org.apache.kafka.clients.consumer.KafkaConsumer
+import org.apache.kafka.common.serialization.StringDeserializer
+
+import java.time.Duration
+
+@Slf4j
+class Consumer {
+    def bootstrapServers = '127.0.0.1:9092'
+    def groupId = 'demo-application'
+    def topic = 'kafka-demo'
+
+    def consumerDemo() {
+        // create producer properties
+        def properties = new Properties()
+        properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers)
+        properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.name)
+        properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.name)
+        properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId)
+        properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, 'earliest')
+
+        // create the consumer
+        def consumer = new KafkaConsumer<String, String>(properties)
+
+        // subscribe the consumer to a topic
+        consumer.subscribe(Arrays.asList(topic))
+
+        // poll for new data
+        while (true) {
+            def records = consumer.poll(Duration.ofMillis(100)) as ConsumerRecords<String, String>
+
+            records.each {
+                log.info("Key: ${it.key()}, Value: ${it.value()}")
+            }
+        }
+    }
+
+}
