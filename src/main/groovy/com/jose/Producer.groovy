@@ -23,6 +23,7 @@ class Producer {
         // create the producer
         def producer = new KafkaProducer<String, String>(properties)
 
+        // producer without keys
         for (i in 0..< 10) {
             def uuid = UUID.randomUUID().toString()
             def topic = 'kafka-demo'
@@ -53,24 +54,7 @@ class Producer {
             })
         }
 
-        // flush data
-        producer.flush()
-
-        // flush and close producer
-        producer.close()
-    }
-
-    // producer with keys
-    def producerDemoKeys() {
-        // create producer properties
-        def properties = new Properties()
-        properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers)
-        properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.name)
-        properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.name)
-
-        // create the producer
-        def producer = new KafkaProducer<String, String>(properties)
-
+        // producer with keys
         for (i in 0..< 10) {
             def uuid = UUID.randomUUID().toString()
             def topic = 'kafka-demo'

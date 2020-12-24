@@ -9,7 +9,6 @@ class Kafka {
         def producer = new Producer(bootstrapServers: '127.0.0.1:9092')
         // call the producer methods
         producer.producerDemo()
-        producer.producerDemoKeys()
 
         def consumer = new Consumer(bootstrapServers: '127.0.0.1:9092')
         // call the consumer methods

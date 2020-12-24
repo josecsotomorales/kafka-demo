@@ -30,12 +30,10 @@ class Consumer {
         consumer.subscribe(Arrays.asList(topic))
 
         // poll for new data
-        while (true) {
-            def records = consumer.poll(Duration.ofMillis(100)) as ConsumerRecords<String, String>
+        def records = consumer.poll(Duration.ofMillis(100)) as ConsumerRecords<String, String>
 
-            records.each {
-                log.info("Key: ${it.key()}, Value: ${it.value()}")
-            }
+        records.each {
+            log.info("Partition: ${it.partition()}, Offset: ${it.offset()} - Key: ${it.key()}, Value: ${it.value()}")
         }
     }
 
