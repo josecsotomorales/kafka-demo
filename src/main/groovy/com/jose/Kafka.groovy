@@ -1,10 +1,14 @@
 package com.jose
 
+import groovy.util.logging.Slf4j
+import org.apache.kafka.clients.producer.Callback
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.clients.producer.ProducerRecord
+import org.apache.kafka.clients.producer.RecordMetadata
 import org.apache.kafka.common.serialization.StringSerializer
 
+@Slf4j
 class Kafka {
     static void main(String[] args) {
 
@@ -23,7 +27,25 @@ class Kafka {
        def record = new ProducerRecord<String, String>('kafka-demo', 'Hello Kafka!')
 
         // send data to producer - asynchronous
-        producer.send(record)
+        producer.send(record, new Callback() {
+            @Override
+            void onCompletion(RecordMetadata metadata, Exception exception) {
+                // executes everytime a record is sent or and exception is thrown
+                if(!exception) {
+                    // the record was sent
+                    log.info(""" 
+                                 |Received new metadata.
+                                 |Topic:        ${metadata.topic()}
+                                 |Partition:    ${metadata.partition()}
+                                 |Offset:       ${metadata.offset()}
+                                 |Timestamp:    ${metadata.timestamp()}       
+                                 |""".stripMargin())
+                } else {
+                    log.error("Error while producing.", exception)
+                }
+
+            }
+        })
 
         // flush data
         producer.flush()
