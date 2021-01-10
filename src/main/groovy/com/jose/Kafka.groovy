@@ -8,11 +8,13 @@ import java.util.concurrent.CountDownLatch
 class Kafka {
     static void main(String[] args) {
 
-        // call the producer
+        // execute the producer
         new Producer(bootstrapServers: '127.0.0.1:9092').producerDemo()
 
-        // call the consumer
+        // execute the consumer
         //new Consumer(bootstrapServers: '127.0.0.1:9092').consumerDemo()
+
+        // execute the consumer with threads
 
         // create a runnable instance
         CountDownLatch latch = new CountDownLatch(1)
@@ -25,16 +27,16 @@ class Kafka {
         // add a shutdown hook
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             log.info("Caught shutdown hook");
-            ((ConsumerThreads) consumerRunnable).shutdown();
+            ((ConsumerThreads) consumerRunnable).shutdown()
             try {
-                latch.await();
+                latch.await()
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                e.printStackTrace()
             }
-            log.info("Application has exited");
+            log.info("Application has exited")
         }
 
-        ));
+        ))
 
         try {
             latch.await()
