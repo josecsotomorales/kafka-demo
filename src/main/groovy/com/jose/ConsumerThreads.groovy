@@ -19,7 +19,8 @@ class ConsumerThreads implements Runnable {
     def topic = 'kafka-demo'
     def consumer
 
-    private CountDownLatch latch
+    // Latch for dealing with multiple threads
+    CountDownLatch latch
 
     ConsumerThreads(CountDownLatch latch) {
 
