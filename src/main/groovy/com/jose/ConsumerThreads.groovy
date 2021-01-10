@@ -57,7 +57,6 @@ class ConsumerThreads implements Runnable {
         } finally {
             // close the consumer
             consumer.close()
-            //
             latch.countDown()
         }
     }
