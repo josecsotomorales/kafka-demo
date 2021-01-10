@@ -26,7 +26,7 @@ class Kafka {
 
         // add a shutdown hook
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            log.info("Caught shutdown hook");
+            log.info("Caught shutdown hook")
             ((ConsumerThreads) consumerRunnable).shutdown()
             try {
                 latch.await()
