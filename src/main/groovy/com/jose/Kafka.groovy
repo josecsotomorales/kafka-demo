@@ -14,6 +14,5 @@ class Kafka {
         // call the consumer methods
         consumer.consumerDemo()
 
-
     }
 }
